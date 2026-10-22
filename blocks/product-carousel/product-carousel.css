@@ -64,13 +64,13 @@
   display: none;
 }
 
-@media (width >= 600px) {
+@media (min-width: 600px) {
   .product-carousel .product-carousel-track {
     grid-auto-columns: calc((100% - 32px) / 3);
   }
 }
 
-@media (width >= 900px) {
+@media (min-width: 900px) {
   .product-carousel .product-carousel-track {
     grid-auto-columns: calc((100% - 48px) / 4);
   }

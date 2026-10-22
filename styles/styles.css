@@ -11,34 +11,36 @@
  */
 
 /* stylelint-disable no-empty-source */
+
+/* Adobe Commerce drop-in design tokens, mapped to the Fútbol Emotion brand */
 :root, .dropin-design {
-  /* Adobe Commerce Dropin design tokens */
-  --color-brand-300: #6d6d6d;
-  --color-brand-500: #454545;
-  --color-brand-600: #383838;
-  --color-brand-700: #2b2b2b;
+  /* brand: FE is black & white, with black primary actions */
+  --color-brand-300: #6b6b6b;
+  --color-brand-500: #0f0f0f;
+  --color-brand-600: #333;
+  --color-brand-700: #000;
   --color-neutral-50: #fff;
-  --color-neutral-100: #fafafa;
-  --color-neutral-200: #f5f5f5;
-  --color-neutral-300: #e8e8e8;
-  --color-neutral-400: #d6d6d6;
+  --color-neutral-100: #f7f8f9;
+  --color-neutral-200: #f4f5f7;
+  --color-neutral-300: #e5e5e5;
+  --color-neutral-400: #dadada;
   --color-neutral-500: #b8b8b8;
-  --color-neutral-600: #8f8f8f;
-  --color-neutral-700: #666;
-  --color-neutral-800: #3d3d3d;
-  --color-neutral-900: #292929;
-  --color-positive-200: #eff5ef;
-  --color-positive-500: #7fb078;
-  --color-positive-800: #53824c;
+  --color-neutral-600: #8a8a8a;
+  --color-neutral-700: #6b6b6b;
+  --color-neutral-800: #2b2b2b;
+  --color-neutral-900: #0f0f0f;
+  --color-positive-200: #e9f6ec;
+  --color-positive-500: #3fa95b;
+  --color-positive-800: #1f7a3a;
   --color-informational-200: #eeeffb;
   --color-informational-500: #6978d9;
   --color-informational-800: #5d6dd6;
-  --color-warning-200: #fdf3e9;
-  --color-warning-500: #e79f5c;
-  --color-warning-800: #cc7a2e;
-  --color-alert-200: #ffebeb;
-  --color-alert-500: #db7070;
-  --color-alert-800: #c35050;
+  --color-warning-200: #fff6dd;
+  --color-warning-500: #ffb800;
+  --color-warning-800: #b37f00;
+  --color-alert-200: #ffeceb;
+  --color-alert-500: #ff3b30;
+  --color-alert-800: #d0261c;
   --color-button-active: var(--color-brand-700);
   --color-button-focus: var(--color-neutral-400);
   --color-button-hover: var(--color-brand-600);
@@ -61,16 +63,16 @@
   --grid-5-columns: 12;
   --grid-5-margins: 0;
   --grid-5-gutters: 24px;
-  --shape-border-radius-1: 3px;
+  --shape-border-radius-1: 4px;
   --shape-border-radius-2: 8px;
-  --shape-border-radius-3: 24px;
+  --shape-border-radius-3: 2.4em;
   --shape-border-width-1: 1px;
   --shape-border-width-2: 1.5px;
   --shape-border-width-3: 2px;
   --shape-border-width-4: 4px;
-  --shape-shadow-1: 0 0 16px 0 rgb(0 0 0 / 16%);
-  --shape-shadow-2: 0 2px 16px 0 rgb(0 0 0 / 16%);
-  --shape-shadow-3: 0 2px 3px 0 rgb(0 0 0 / 16%);
+  --shape-shadow-1: 0 0 16px 0 rgb(0 0 0 / 12%);
+  --shape-shadow-2: 0 2px 16px 0 rgb(0 0 0 / 12%);
+  --shape-shadow-3: 0 2px 3px 0 rgb(0 0 0 / 12%);
   --shape-icon-stroke-1: 1px;
   --shape-icon-stroke-2: 1.5px;
   --shape-icon-stroke-3: 2px;
@@ -88,53 +90,95 @@
   --spacing-huge: 120px;
   --spacing-xhuge: 144px;
   --spacing-xxhuge: 192px;
-  --type-base-font-family: adobe-clean, roboto, roboto-fallback, system-ui, sans-serif;
-  --type-display-1-font: normal normal 300 6rem/7.2rem var(--type-base-font-family);
-  --type-display-1-letter-spacing: 0.04em;
-  --type-display-2-font: normal normal 300 4.8rem/5.6rem var(--type-base-font-family);
-  --type-display-2-letter-spacing: 0.04em;
-  --type-display-3-font: normal normal 300 3.4rem/4rem var(--type-base-font-family);
-  --type-display-3-letter-spacing: 0.04em;
-  --type-headline-1-font: normal normal 400 2.4rem/3.2rem var(--type-base-font-family);
-  --type-headline-1-letter-spacing: 0.04em;
-  --type-headline-2-default-font: normal normal 300 2rem/2.4rem var(--type-base-font-family);
-  --type-headline-2-default-letter-spacing: 0.04em;
-  --type-headline-2-strong-font: normal normal 700 2rem/2.4rem var(--type-base-font-family);
-  --type-headline-2-strong-letter-spacing: 0.04em;
-  --type-body-1-default-font: normal normal 300 1.6rem/2.4rem var(--type-base-font-family);
-  --type-body-1-default-letter-spacing: 0.04em;
-  --type-body-1-strong-font: normal normal 700 1.6rem/2.4rem var(--type-base-font-family);
-  --type-body-1-strong-letter-spacing: 0.04em;
-  --type-body-1-emphasized-font: normal normal 700 1.6rem/2.4rem var(--type-base-font-family);
-  --type-body-1-emphasized-letter-spacing: 0.04em;
-  --type-body-2-default-font: normal normal 300 1.4rem/2rem var(--type-base-font-family);
-  --type-body-2-default-letter-spacing: 0.04em;
-  --type-body-2-strong-font: normal normal 700 1.4rem/2rem var(--type-base-font-family);
-  --type-body-2-strong-letter-spacing: 0.04em;
-  --type-body-2-emphasized-font: normal normal 700 1.4rem/2rem var(--type-base-font-family);
-  --type-body-2-emphasized-letter-spacing: 0.04em;
-  --type-button-1-font: normal normal 400 2rem/2.6rem var(--type-base-font-family);
-  --type-button-1-letter-spacing: 0.08em;
-  --type-button-2-font: normal normal 400 1.6rem/2.4rem var(--type-base-font-family);
-  --type-button-2-letter-spacing: 0.08em;
-  --type-details-caption-1-font: normal normal 400 1.2rem/1.6rem var(--type-base-font-family);
-  --type-details-caption-1-letter-spacing: 0.08em;
-  --type-details-caption-2-font: normal normal 300 1.2rem/1.6rem var(--type-base-font-family);
-  --type-details-caption-2-letter-spacing: 0.08em;
-  --type-details-overline-font: normal normal 400 1.2rem/2rem var(--type-base-font-family);
-  --type-details-overline-letter-spacing: 0.16em;
+
+  /* typography: Figtree (weights 400/500/600/800) */
+  --type-base-font-family: figtree, figtree-fallback, system-ui, sans-serif;
+  --type-display-1-font: normal normal 800 3.2rem/3.7rem var(--type-base-font-family);
+  --type-display-1-letter-spacing: -0.01em;
+  --type-display-2-font: normal normal 800 2.6rem/3rem var(--type-base-font-family);
+  --type-display-2-letter-spacing: -0.01em;
+  --type-display-3-font: normal normal 800 2.2rem/2.6rem var(--type-base-font-family);
+  --type-display-3-letter-spacing: -0.01em;
+  --type-headline-1-font: normal normal 800 2rem/2.6rem var(--type-base-font-family);
+  --type-headline-1-letter-spacing: -0.01em;
+  --type-headline-2-default-font: normal normal 600 1.8rem/2.4rem var(--type-base-font-family);
+  --type-headline-2-default-letter-spacing: 0;
+  --type-headline-2-strong-font: normal normal 800 1.8rem/2.4rem var(--type-base-font-family);
+  --type-headline-2-strong-letter-spacing: 0;
+  --type-body-1-default-font: normal normal 400 1.6rem/2.4rem var(--type-base-font-family);
+  --type-body-1-default-letter-spacing: 0;
+  --type-body-1-strong-font: normal normal 600 1.6rem/2.4rem var(--type-base-font-family);
+  --type-body-1-strong-letter-spacing: 0;
+  --type-body-1-emphasized-font: normal normal 800 1.6rem/2.4rem var(--type-base-font-family);
+  --type-body-1-emphasized-letter-spacing: 0;
+  --type-body-2-default-font: normal normal 400 1.4rem/2rem var(--type-base-font-family);
+  --type-body-2-default-letter-spacing: 0;
+  --type-body-2-strong-font: normal normal 600 1.4rem/2rem var(--type-base-font-family);
+  --type-body-2-strong-letter-spacing: 0;
+  --type-body-2-emphasized-font: normal normal 800 1.4rem/2rem var(--type-base-font-family);
+  --type-body-2-emphasized-letter-spacing: 0;
+  --type-button-1-font: normal normal 600 1.8rem/2.4rem var(--type-base-font-family);
+  --type-button-1-letter-spacing: 0;
+  --type-button-2-font: normal normal 600 1.6rem/2rem var(--type-base-font-family);
+  --type-button-2-letter-spacing: 0;
+  --type-details-caption-1-font: normal normal 500 1.2rem/1.6rem var(--type-base-font-family);
+  --type-details-caption-1-letter-spacing: 0.02em;
+  --type-details-caption-2-font: normal normal 400 1.2rem/1.6rem var(--type-base-font-family);
+  --type-details-caption-2-letter-spacing: 0.02em;
+  --type-details-overline-font: normal normal 800 1.2rem/2rem var(--type-base-font-family);
+  --type-details-overline-letter-spacing: 0.08em;
 
   /* Additional tokens */
-  --type-fixed-font-family: adobe-clean, "Roboto Mono", menlo, consolas, "Liberation Mono", monospace, system-ui, sans-serif;
+  --type-fixed-font-family: "Roboto Mono", menlo, consolas, "Liberation Mono", monospace, system-ui, sans-serif;
   --background-color: var(--color-neutral-50);
-  --nav-height: 6.4rem;
+
+  /* Fútbol Emotion brand aliases (used by content blocks and section styles) */
+  --text-color: var(--color-neutral-900);
+  --light-color: var(--color-neutral-200);
+  --dark-color: var(--color-neutral-700);
+  --link-color: var(--color-neutral-900);
+  --link-hover-color: #000;
+  --accent-color: #ff3b30;
+  --badge-color: #ffb800;
+  --body-font-family: var(--type-base-font-family);
+  --heading-font-family: var(--type-base-font-family);
+  --body-font-size-m: 16px;
+  --body-font-size-s: 15px;
+  --body-font-size-xs: 13px;
+  --heading-font-size-xxl: 32px;
+  --heading-font-size-xl: 26px;
+  --heading-font-size-l: 22px;
+  --heading-font-size-m: 19px;
+  --heading-font-size-s: 17px;
+  --heading-font-size-xs: 15px;
+  --content-max-width: 1440px;
+
+  /* header: topbar (36px) + main row (56px) + search row (56px) on mobile */
+  --nav-height: 56px;
+  --header-height: 148px;
+}
+
+@media (min-width: 900px) {
+  :root, .dropin-design {
+    --type-display-1-font: normal normal 800 4rem/4.6rem var(--type-base-font-family);
+    --type-display-2-font: normal normal 800 3.1rem/3.6rem var(--type-base-font-family);
+    --type-display-3-font: normal normal 800 2.4rem/2.8rem var(--type-base-font-family);
+    --heading-font-size-xxl: 40px;
+    --heading-font-size-xl: 31px;
+    --heading-font-size-l: 24px;
+    --heading-font-size-m: 20px;
+
+    /* header: topbar (36px) + main row (68px) + categories bar (71px) on desktop */
+    --nav-height: 68px;
+    --header-height: 175px;
+  }
 }
 
 /* fallback font */
 @font-face {
-  font-family: adobe-clean;
-  size-adjust: 100%;
-  src: local("Helvetica");
+  font-family: figtree-fallback;
+  size-adjust: 101%;
+  src: local("Arial");
 }
 
 html, body {
@@ -149,7 +193,7 @@ body {
   font: var(--type-body-1-default-font);
   letter-spacing: var(--type-body-1-default-letter-spacing);
   margin: 0;
-  color: var(--color-neutral-800);
+  color: var(--text-color);
   background-color: var(--background-color);
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -163,7 +207,7 @@ body:not(.appear) {
 
 header {
   grid-row: 1;
-  height: var(--nav-height);
+  height: var(--header-height);
 }
 
 main {
@@ -192,39 +236,19 @@ h5,
 h6 {
   margin-top: 0.8em;
   margin-bottom: 0.25em;
-  line-height: 1.25;
+  font-family: var(--heading-font-family);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   scroll-margin: 40px;
 }
 
-h1 {
-  font: var(--type-display-1-font);
-  letter-spacing: var(--type-display-1-letter-spacing);
-}
-
-h2 {
-  font: var(--type-display-2-font);
-  letter-spacing: var(--type-display-2-letter-spacing);
-}
-
-h3 {
-  font: var(--type-display-3-font);
-  letter-spacing: var(--type-display-3-letter-spacing);
-}
-
-h4 {
-  font: var(--type-headline-1-font);
-  letter-spacing: var(--type-headline-1-letter-spacing);
-}
-
-h5 {
-  font: var(--type-headline-2-strong-font);
-  letter-spacing: var(--type-headline-2-strong-letter-spacing);
-}
-
-h6 {
-  font: var(--type-headline-2-default-font);
-  letter-spacing: var(--type-headline-2-default-letter-spacing);
-}
+h1 { font-size: var(--heading-font-size-xxl); }
+h2 { font-size: var(--heading-font-size-xl); }
+h3 { font-size: var(--heading-font-size-l); }
+h4 { font-size: var(--heading-font-size-m); }
+h5 { font-size: var(--heading-font-size-s); }
+h6 { font-size: var(--heading-font-size-xs); }
 
 p,
 dl,
@@ -232,8 +256,8 @@ ol,
 ul,
 pre,
 blockquote {
-  margin-top: 1.5625em;
-  margin-bottom: 1.5625em;
+  margin-top: 0.8em;
+  margin-bottom: 0.25em;
 }
 
 hr {
@@ -275,21 +299,20 @@ button {
 
 /* links */
 a:not(.dropin-design a) {
-  color: var(--color-brand-500);
-  font: var(--type-body-1-strong-font);
-  letter-spacing: var(--type-body-1-strong-letter-spacing);
+  color: var(--link-color);
   text-decoration: none;
   overflow-wrap: break-word;
 }
 
 a:not(.dropin-design a):hover {
-  color: var(--color-brand-600);
+  color: var(--link-hover-color);
   text-decoration: underline;
 }
 
 /* buttons */
 p.button-wrapper {
-  margin: var(--spacing-small) 0;
+  display: inline-flex;
+  margin: var(--spacing-xsmall) var(--spacing-xsmall) 0 0;
 }
 
 main a.button:any-link,
@@ -302,11 +325,10 @@ button.button {
   margin: 0;
   border: var(--shape-border-width-3) solid transparent;
   border-radius: var(--shape-border-radius-3);
-  padding: 0.5em 1.2em;
+  padding: 0.55em 1.1em;
   font: var(--type-button-2-font);
   letter-spacing: var(--type-button-2-letter-spacing);
   font-style: normal;
-  font-weight: 500;
   line-height: 1.25;
   text-decoration: none;
   background-color: var(--color-brand-500);
@@ -366,16 +388,18 @@ button.button.primary:disabled:focus-visible {
 
 main a.button.secondary,
 button.button.secondary {
-  background-color: unset;
-  border: var(--shape-border-width-3) solid currentcolor;
-  color: var(--color-brand-500);
+  background-color: var(--background-color);
+  border: var(--shape-border-width-1) solid var(--text-color);
+  color: var(--text-color);
+  font-weight: 400;
 }
 
 main a.button.secondary:hover,
 main a.button.secondary:focus-visible,
 button.button.secondary:hover,
 button.button.secondary:focus-visible {
-  color: var(--color-brand-600);
+  background-color: var(--light-color);
+  color: var(--text-color);
 }
 
 
@@ -465,25 +489,19 @@ main > .section {
 }
 
 main > .section > div {
-  max-width: 1200px;
+  max-width: var(--content-max-width);
   margin: auto;
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-small);
 }
 
 main > .section:first-of-type {
   margin-top: 0;
 }
 
-@media (min-width: 900px) {
-  main > .section > div {
-    padding: 0 var(--spacing-big);
-  }
-}
-
 /* section metadata - styles - start */
 main .section.light,
 main .section.highlight {
-  background-color: var(--color-neutral-100);
+  background-color: var(--light-color);
   margin: 0;
   padding: var(--spacing-xbig) 0;
 }
@@ -566,6 +584,186 @@ main .section[data-margin="xxhuge"] {
 }
 
 /* section metadata - styles - end */
+
+/* stylelint-disable no-descending-specificity */
+
+/* Fútbol Emotion section styles - start */
+
+/* section: centered content */
+main .section.centered .default-content-wrapper {
+  text-align: center;
+}
+
+/* section: full-bleed blocks */
+main .section.full-width > div {
+  max-width: none;
+  padding: 0;
+}
+
+/* section headings */
+main .section > .default-content-wrapper h2:first-child {
+  margin-top: 0;
+}
+
+/* section: products (category tabs + centered CTA) */
+main .section.products .default-content-wrapper:first-child ul {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+main .section.products .default-content-wrapper:first-child li a:any-link {
+  display: block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--light-color);
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+main .section.products .default-content-wrapper:first-child li strong a:any-link {
+  background: var(--text-color);
+  color: var(--background-color);
+  font-weight: 800;
+}
+
+main .section.products .default-content-wrapper:last-child {
+  text-align: center;
+}
+
+/* section: recommender (dark background image) */
+main .section.recommender {
+  position: relative;
+  margin: var(--spacing-xbig) 0;
+  padding: var(--spacing-xxbig) 0;
+  color: var(--background-color);
+  background: var(--color-neutral-800);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+main .section.recommender .default-content-wrapper p:has(> picture:only-child),
+main .section.seo .default-content-wrapper p:has(> picture:only-child) {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  z-index: -1;
+}
+
+main .section.recommender .default-content-wrapper picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.45);
+}
+
+main .section.recommender h2 {
+  color: var(--background-color);
+}
+
+@media (min-width: 900px) {
+  main .section.recommender {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-big);
+    padding: var(--spacing-xxbig) max(16px, calc((100% - var(--content-max-width)) / 2) + 16px);
+  }
+
+  main .section.recommender > div {
+    margin: 0;
+    padding: 0 0 0 42px;
+  }
+
+  main .section.recommender > .default-content-wrapper {
+    flex: 0 0 38%;
+  }
+
+  main .section.recommender > .cards-wrapper {
+    flex: 1;
+  }
+}
+
+/* section: ratings */
+main .section.ratings .default-content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-top: 1px solid var(--color-neutral-300);
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+main .section.ratings .default-content-wrapper > * {
+  margin: 0;
+}
+
+main .section.ratings h2 {
+  font-size: var(--heading-font-size-m);
+}
+
+main .section.ratings p strong {
+  font-size: var(--heading-font-size-l);
+  font-weight: 800;
+}
+
+main .section.ratings .icon {
+  width: 20px;
+  height: 20px;
+}
+
+main .section.ratings p > a:only-child:any-link {
+  display: inline-block;
+  padding: 0.55em 1.1em;
+  border-radius: 2.4em;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+main .section.ratings p > a:only-child:hover {
+  background-color: var(--color-brand-600);
+  text-decoration: none;
+}
+
+/* section: seo (dark background image) */
+main .section.seo {
+  position: relative;
+  margin-bottom: 0;
+  padding: var(--spacing-large) 0;
+  color: var(--background-color);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+main .section.seo .default-content-wrapper {
+  max-width: 900px;
+}
+
+main .section.seo picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.35);
+}
+
+main .section.seo h1 {
+  margin-top: 0;
+  color: var(--background-color);
+}
+
+main .section.seo a:any-link {
+  color: var(--background-color);
+  text-decoration: underline;
+}
+
+/* Fútbol Emotion section styles - end */
 
 /* Base Design System Tokens */
 .dropin-design.dropin-design {

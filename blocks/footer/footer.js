@@ -10,6 +10,42 @@ import createModal from '../modal/modal.js';
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+const SECTION_NAMES = ['brands', 'links', 'member', 'main', 'legal'];
+
+/**
+ * Applies the Fútbol Emotion footer decorations to the fragment sections
+ * @param {Element[]} sections The footer fragment sections
+ */
+function decorateSections(sections) {
+  sections.forEach((section, i) => {
+    if (SECTION_NAMES[i]) section.classList.add(`footer-${SECTION_NAMES[i]}`);
+  });
+
+  sections.forEach((section) => {
+    // app store badges: wrap each image with the link that follows it
+    section.querySelectorAll('p:has(> picture)').forEach((p) => {
+      const next = p.nextElementSibling;
+      const link = next?.querySelector(':scope > a:only-child');
+      if (link) {
+        const label = link.textContent.trim();
+        link.textContent = '';
+        link.setAttribute('aria-label', label);
+        link.className = 'footer-badge';
+        link.append(p.querySelector('picture'));
+        p.replaceChildren(link);
+        next.remove();
+      }
+    });
+
+    section.querySelectorAll('.button').forEach((a) => {
+      if (!a.closest('.footer-member')) a.classList.remove('button', 'primary', 'secondary');
+    });
+    section.querySelectorAll('.button-wrapper').forEach((p) => {
+      if (!p.closest('.footer-member')) p.classList.remove('button-wrapper');
+    });
+  });
+}
+
 /**
  * Toggles all storeSelector sections
  * @param {Element} sections The container element
@@ -166,6 +202,7 @@ export default async function decorate(block) {
       })($storeSwitcherBtn);
     }
   }
+  decorateSections([...fragment.children]);
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
   block.append(footer);

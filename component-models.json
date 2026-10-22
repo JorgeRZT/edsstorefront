@@ -59,6 +59,30 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Ancho completo",
+            "value": "full-width"
+          },
+          {
+            "name": "Centrado",
+            "value": "centered"
+          },
+          {
+            "name": "Productos",
+            "value": "products"
+          },
+          {
+            "name": "Recomendador",
+            "value": "recommender"
+          },
+          {
+            "name": "Valoraciones",
+            "value": "ratings"
+          },
+          {
+            "name": "SEO",
+            "value": "seo"
           }
         ]
       },
@@ -180,6 +204,38 @@
     ]
   },
   {
+    "id": "cards",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Variante",
+        "options": [
+          {
+            "name": "Productos",
+            "value": "products"
+          },
+          {
+            "name": "Jugadores",
+            "value": "players"
+          },
+          {
+            "name": "Recomendador",
+            "value": "recommender"
+          },
+          {
+            "name": "Categorías",
+            "value": "categories"
+          },
+          {
+            "name": "Blog",
+            "value": "blog"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
@@ -202,6 +258,22 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Variante",
+        "options": [
+          {
+            "name": "Hero",
+            "value": "hero"
+          }
+        ]
       }
     ]
   },
@@ -232,6 +304,17 @@
   {
     "id": "columns",
     "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Variante",
+        "options": [
+          {
+            "name": "Banners",
+            "value": "banners"
+          }
+        ]
+      },
       {
         "component": "number",
         "valueType": "number",
@@ -449,6 +532,31 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "product-carousel",
+    "fields": [
+      {
+        "component": "text",
+        "name": "skus",
+        "label": "SKUs (separados por comas)"
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Categoría (categoryPath)"
+      },
+      {
+        "component": "text",
+        "name": "phrase",
+        "label": "Búsqueda"
+      },
+      {
+        "component": "number",
+        "name": "page-size",
+        "label": "Número de productos"
       }
     ]
   },

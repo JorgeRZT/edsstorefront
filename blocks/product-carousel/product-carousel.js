@@ -47,11 +47,15 @@ function renderCard(product, labels) {
     </div>`;
   const complex = product.__typename === 'ComplexProductView';
   UI.render(Button, {
-    children: complex ? (labels.Global?.ViewProduct || 'Ver producto') : (labels.Global?.AddProductToCart || 'Añadir a la cesta'),
+    children: complex
+      ? (labels.Global?.ViewProduct || 'Ver producto')
+      : (labels.Global?.AddProductToCart || 'Añadir a la cesta'),
     icon: Icon({ source: 'Cart' }),
     variant: 'primary',
     disabled: !complex && !product.inStock,
-    ...(complex ? { href } : { onClick: () => cartApi.addProductsToCart([{ sku: product.sku, quantity: 1 }]) }),
+    ...(complex
+      ? { href }
+      : { onClick: () => cartApi.addProductsToCart([{ sku: product.sku, quantity: 1 }]) }),
   })(li.querySelector('.product-carousel-actions'));
   return li;
 }

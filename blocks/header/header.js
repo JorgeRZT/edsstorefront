@@ -183,24 +183,40 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  const classes = ['brand', 'sections', 'tools'];
+  const classes = ['brand', 'sections', 'tools', 'topbar'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
     if (section) section.classList.add(`nav-${c}`);
   });
 
+  const iconPath = `${window.hlx?.codeBasePath ?? ''}/icons`;
+
+  // brand: Fútbol Emotion logo linking to the authored brand link
   const navBrand = nav.querySelector('.nav-brand');
-  const brandLink = navBrand.querySelector('.button');
-  if (brandLink) {
-    brandLink.className = '';
-    brandLink.closest('.button-container').className = '';
+  if (navBrand) {
+    const brandLink = navBrand.querySelector('a');
+    const logoLink = document.createElement('a');
+    logoLink.href = brandLink?.href ?? rootLink('/');
+    const logo = document.createElement('img');
+    logo.src = `${iconPath}/futbolemotion.svg`;
+    logo.alt = (brandLink ?? navBrand).textContent.trim() || 'Fútbol Emotion';
+    logo.width = 160;
+    logo.height = 30;
+    logoLink.append(logo);
+    navBrand.replaceChildren(logoLink);
   }
+
+  // optional 4th section: topbar message, rendered above the nav
+  const navTopbar = nav.querySelector('.nav-topbar');
+  navTopbar?.remove();
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
     navSections
       .querySelectorAll(':scope .default-content-wrapper > ul > li')
       .forEach((navSection) => {
+        if (navSection.querySelector(':scope > strong')) navSection.classList.add('nav-highlight');
+        if (navSection.querySelector(':scope > em')) navSection.classList.add('nav-end');
         if (navSection.querySelector('ul')) {
           navSection.classList.add('nav-drop');
           navSection.setAttribute('role', 'button');
@@ -229,6 +245,32 @@ export default async function decorate(block) {
   }
 
   const navTools = nav.querySelector('.nav-tools');
+
+  // authored tool links: keep plain links (e.g. stores), reuse account/cart labels
+  const toolLabels = {};
+  navTools.querySelectorAll(':scope li').forEach((li) => {
+    const icon = li.querySelector('.icon');
+    const iconName = [...(icon?.classList ?? [])]
+      .find((c) => c.startsWith('icon-'))?.substring(5);
+    const label = li.textContent.trim();
+    if (iconName === 'user' || iconName === 'bag') {
+      toolLabels[iconName] = label;
+      li.remove();
+      return;
+    }
+    li.classList.add('nav-tools-link');
+    const link = li.querySelector('a');
+    if (link) {
+      [...link.childNodes]
+        .filter((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim())
+        .forEach((n) => {
+          const span = document.createElement('span');
+          span.className = 'nav-tools-label';
+          span.textContent = n.textContent.trim();
+          n.replaceWith(span);
+        });
+    }
+  });
 
   /** Wishlist */
   const wishlist = document.createRange().createContextualFragment(`
@@ -265,6 +307,8 @@ export default async function decorate(block) {
   const minicartPanel = navTools.querySelector('.minicart-panel');
 
   const cartButton = navTools.querySelector('.nav-cart-button');
+  cartButton.innerHTML = `<img src="${iconPath}/bag.svg" alt="" width="24" height="24"><span class="nav-tools-label"></span>`;
+  cartButton.querySelector('.nav-tools-label').textContent = toolLabels.bag ?? labels.Global?.Cart ?? 'Cart';
 
   // Kept mounted at all times so the item count change is reliably
   // announced instead of being missed, since the visual badge is a
@@ -389,138 +433,144 @@ export default async function decorate(block) {
     previousCartQuantity = totalQuantity;
   }, { eager: true });
 
-  /** Search */
+  /** Search (always visible search bar, results rendered by the product discovery drop-in) */
+  const searchPlaceholder = labels.Global?.SearchPlaceholder ?? '¿Qué es lo que buscas?';
+  const searchLabel = labels.Global?.Search ?? 'Search';
   const searchFragment = document.createRange().createContextualFragment(`
-  <div class="search-wrapper nav-tools-wrapper">
-    <button type="button" class="nav-search-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="search-panel">${labels.Global?.Search ?? 'Search'}</button>
+  <div class="nav-search search-wrapper">
+    <form id="search-bar-form" class="nav-search-form" role="search" action="${rootLink('/search')}">
+      <input type="search" name="q" autocomplete="off" aria-controls="search-panel">
+      <button type="submit" class="nav-search-button"><img src="${iconPath}/search.svg" alt="" width="20" height="20"></button>
+    </form>
     <div class="nav-search-input nav-search-panel nav-tools-panel" id="search-panel">
-      <form id="search-bar-form"></form>
       <div class="search-bar-result" style="display: none;"></div>
     </div>
   </div>
   `);
 
-  navTools.append(searchFragment);
+  nav.append(searchFragment);
 
-  const searchPanel = navTools.querySelector('.nav-search-panel');
-  const searchButton = navTools.querySelector('.nav-search-button');
-  const searchForm = searchPanel.querySelector('#search-bar-form');
+  const searchWrapper = nav.querySelector('.nav-search');
+  const searchPanel = searchWrapper.querySelector('.nav-search-panel');
+  const searchForm = searchWrapper.querySelector('#search-bar-form');
+  const searchInput = searchForm.querySelector('input');
+  const searchButton = searchForm.querySelector('.nav-search-button');
   const searchResult = searchPanel.querySelector('.search-bar-result');
+  searchInput.placeholder = searchPlaceholder;
+  searchInput.setAttribute('aria-label', searchPlaceholder);
+  searchButton.setAttribute('aria-label', searchLabel);
 
-  async function toggleSearch(state) {
-    const pageSize = 4;
+  const pageSize = 4;
+  let searchLoader;
 
-    if (state) {
-      await withLoadingState(searchPanel, searchButton, async () => {
-        await import('../../scripts/initializers/search.js');
-
-        // Load search components in parallel
-        const [
-          { search },
-          { render },
-          { SearchResults },
-          { provider: UI, Input, Button },
-        ] = await Promise.all([
-          import('@dropins/storefront-product-discovery/api.js'),
-          import('@dropins/storefront-product-discovery/render.js'),
-          import('@dropins/storefront-product-discovery/containers/SearchResults.js'),
-          import('@dropins/tools/components.js'),
-          import('@dropins/tools/lib.js'),
-        ]);
-
-        render.render(SearchResults, {
-          skeletonCount: pageSize,
-          scope: 'popover',
-          routeProduct: ({ urlKey, sku }) => getProductLink(urlKey, sku),
-          onSearchResult: (results) => {
-            searchResult.style.display = results.length > 0 ? 'block' : 'none';
-          },
-          slots: {
-            ProductImage: (ctx) => {
-              const { product, defaultImageProps } = ctx;
-              const anchorWrapper = document.createElement('a');
-              anchorWrapper.href = getProductLink(product.urlKey, product.sku);
-
-              tryRenderAemAssetsImage(ctx, {
-                alias: product.sku,
-                imageProps: defaultImageProps,
-                wrapper: anchorWrapper,
-                params: {
-                  width: defaultImageProps.width,
-                  height: defaultImageProps.height,
-                },
-              });
-            },
-            Footer: async (ctx) => {
-              // View all results button
-              const viewAllResultsWrapper = document.createElement('div');
-
-              const viewAllResultsButton = await UI.render(Button, {
-                children: labels.Global?.SearchViewAll,
-                variant: 'secondary',
-                href: rootLink('/search'),
-              })(viewAllResultsWrapper);
-
-              ctx.appendChild(viewAllResultsWrapper);
-
-              ctx.onChange((next) => {
-                viewAllResultsButton?.setProps((prev) => ({
-                  ...prev,
-                  href: `${rootLink('/search')}?q=${encodeURIComponent(next.variables?.phrase || '')}`,
-                }));
-              });
-            },
-          },
-        })(searchResult);
-
-        searchForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const query = e.target.search.value;
-          if (query.length) {
-            window.location.href = `${rootLink('/search')}?q=${encodeURIComponent(query)}`;
-          }
-        });
-
-        UI.render(Input, {
-          name: 'search',
-          placeholder: labels.Global?.Search,
-          onValue: (phrase) => {
-            if (!phrase) {
-              search(null, { scope: 'popover' });
-              return;
-            }
-
-            if (phrase.length < 3) {
-              return;
-            }
-
-            search({
-              phrase,
-              pageSize,
-              filter: [
-                { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
-              ],
-            }, { scope: 'popover' });
-          },
-        })(searchForm);
-      });
-    }
-
-    togglePanel(searchPanel, state);
-    searchButton.setAttribute(
-      'aria-expanded',
-      searchPanel.classList.contains('nav-tools-panel--show') ? 'true' : 'false',
-    );
-    if (state) searchForm?.querySelector('input')?.focus();
+  function toggleSearch(state) {
+    const show = state && searchResult.style.display !== 'none';
+    searchPanel.classList.toggle('nav-tools-panel--show', !!show);
+    searchInput.setAttribute('aria-expanded', show ? 'true' : 'false');
   }
 
-  searchButton.addEventListener('click', () => toggleSearch(!searchPanel.classList.contains('nav-tools-panel--show')));
+  function loadSearch() {
+    searchLoader ??= (async () => {
+      await import('../../scripts/initializers/search.js');
 
-  navTools.querySelector('.nav-search-button').addEventListener('click', () => {
+      const [
+        { search },
+        { render },
+        { SearchResults },
+        { provider: UI, Button },
+      ] = await Promise.all([
+        import('@dropins/storefront-product-discovery/api.js'),
+        import('@dropins/storefront-product-discovery/render.js'),
+        import('@dropins/storefront-product-discovery/containers/SearchResults.js'),
+        import('@dropins/tools/components.js'),
+      ]);
+
+      await render.render(SearchResults, {
+        skeletonCount: pageSize,
+        scope: 'popover',
+        routeProduct: ({ urlKey, sku }) => getProductLink(urlKey, sku),
+        onSearchResult: (results) => {
+          searchResult.style.display = results.length > 0 ? 'block' : 'none';
+          toggleSearch(searchWrapper.contains(document.activeElement) && results.length > 0);
+        },
+        slots: {
+          ProductImage: (ctx) => {
+            const { product, defaultImageProps } = ctx;
+            const anchorWrapper = document.createElement('a');
+            anchorWrapper.href = getProductLink(product.urlKey, product.sku);
+
+            tryRenderAemAssetsImage(ctx, {
+              alias: product.sku,
+              imageProps: defaultImageProps,
+              wrapper: anchorWrapper,
+              params: {
+                width: defaultImageProps.width,
+                height: defaultImageProps.height,
+              },
+            });
+          },
+          Footer: async (ctx) => {
+            // View all results button
+            const viewAllResultsWrapper = document.createElement('div');
+
+            const viewAllResultsButton = await UI.render(Button, {
+              children: labels.Global?.SearchViewAll,
+              variant: 'secondary',
+              href: rootLink('/search'),
+            })(viewAllResultsWrapper);
+
+            ctx.appendChild(viewAllResultsWrapper);
+
+            ctx.onChange((next) => {
+              viewAllResultsButton?.setProps((prev) => ({
+                ...prev,
+                href: `${rootLink('/search')}?q=${encodeURIComponent(next.variables?.phrase || '')}`,
+              }));
+            });
+          },
+        },
+      })(searchResult);
+
+      return search;
+    })();
+    return searchLoader;
+  }
+
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+    if (query.length) {
+      window.location.href = `${rootLink('/search')}?q=${encodeURIComponent(query)}`;
+    }
+  });
+
+  searchInput.addEventListener('focus', () => {
+    loadSearch();
+    toggleSearch(true);
     if (isDesktop.matches) {
       toggleAllNavSections(navSections);
       overlay.classList.remove('show');
     }
+  });
+
+  searchInput.addEventListener('input', async () => {
+    const search = await loadSearch();
+    const phrase = searchInput.value.trim();
+    if (!phrase) {
+      search(null, { scope: 'popover' });
+      toggleSearch(false);
+      return;
+    }
+
+    if (phrase.length < 3) return;
+
+    search({
+      phrase,
+      pageSize,
+      filter: [
+        { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
+      ],
+    }, { scope: 'popover' });
   });
 
   // Close panels when clicking outside
@@ -544,13 +594,19 @@ export default async function decorate(block) {
       toggleMiniCart(false);
     }
 
-    if (!searchPanel.contains(e.target) && !searchButton.contains(e.target)) {
+    if (!searchWrapper.contains(e.target)) {
       toggleSearch(false);
     }
   });
 
   const navWrapper = document.createElement('div');
   navWrapper.className = 'nav-wrapper';
+  if (navTopbar) {
+    const topbar = document.createElement('div');
+    topbar.className = 'nav-topbar';
+    topbar.append(...(navTopbar.querySelector('.default-content-wrapper') ?? navTopbar).children);
+    navWrapper.append(topbar);
+  }
   navWrapper.append(nav);
   block.append(navWrapper);
 
@@ -588,5 +644,8 @@ export default async function decorate(block) {
     navSections,
     () => !isDesktop.matches && toggleMenu(nav, navSections, false),
   );
-  renderAuthDropdown(navTools);
+  renderAuthDropdown(navTools, {
+    label: toolLabels.user ?? labels.Global?.MyAccount ?? 'My Account',
+    icon: `${iconPath}/user.svg`,
+  });
 }

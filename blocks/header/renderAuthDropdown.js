@@ -33,7 +33,15 @@ function renderSignIn(element) {
   })(element);
 }
 
-export function renderAuthDropdown(navTools) {
+/**
+ * Renders the account dropdown (sign in / account menu)
+ * @param {Element} navTools The nav tools container
+ * @param {Object} [options]
+ * @param {string} [options.label] Visible label for the account button (e.g. "Cuenta")
+ * @param {string} [options.icon] Icon URL for the account button
+ */
+export function renderAuthDropdown(navTools, options = {}) {
+  const { label, icon } = options;
   const dropdownElement = document.createRange().createContextualFragment(`
  <div class="dropdown-wrapper nav-tools-wrapper">
     <button type="button" class="nav-dropdown-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="login-modal"></button>
@@ -100,10 +108,21 @@ export function renderAuthDropdown(navTools) {
     if (isAuthenticated || getUserTokenCookie) {
       authDropDownMenuList.style.display = 'block';
       authDropinContainer.style.display = 'none';
-      loginButton.textContent = `Hi, ${getUserNameCookie}`;
+      if (icon) {
+        loginButton.innerHTML = `<img src="${icon}" alt="" width="24" height="24" loading="lazy"><span class="nav-tools-label"></span>`;
+        loginButton.querySelector('.nav-tools-label').textContent = `Hi, ${getUserNameCookie}`;
+      } else {
+        loginButton.textContent = `Hi, ${getUserNameCookie}`;
+      }
     } else {
       authDropDownMenuList.style.display = 'none';
       authDropinContainer.style.display = 'block';
+      if (icon) {
+        loginButton.innerHTML = `<img src="${icon}" alt="" width="24" height="24" loading="lazy"><span class="nav-tools-label"></span>`;
+        loginButton.querySelector('.nav-tools-label').textContent = label || 'My Account';
+        loginButton.setAttribute('aria-label', label || 'My Account');
+        return;
+      }
       loginButton.innerHTML = `
       <svg
           width="25"

@@ -1,4 +1,5 @@
 import { fetchPlaceholders } from '../../scripts/commerce.js';
+import { moveInstrumentation } from '../../scripts/ue-utils.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -85,6 +86,7 @@ function createSlide(row, slideIndex, carouselId) {
   slide.dataset.slideIndex = slideIndex;
   slide.setAttribute('id', `carousel-${carouselId}-slide-${slideIndex}`);
   slide.classList.add('carousel-slide');
+  moveInstrumentation(row, slide);
 
   row.querySelectorAll(':scope > div').forEach((column, colIdx) => {
     column.classList.add(

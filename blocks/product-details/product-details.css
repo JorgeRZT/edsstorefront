@@ -5,6 +5,12 @@
   margin-top: var(--spacing-medium);
 }
 
+/* the gallery drop-in has a fixed max height tuned for a 1200px wide layout */
+.product-details {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .product-details__left-column {
   display: none;
 }
