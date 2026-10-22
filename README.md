@@ -29,7 +29,8 @@ Universal Editor ──► AEM Sites (layout + contenido)
 ```
 
 - **Overlay**: el content source del sitio es DA, con overlay `markup` a `https://json2html.adobeaem.workers.dev/jorgerzt/edsstorefront/main`. Las rutas configuradas en json2html salen de AEM; el resto (404 en json2html) cae a DA.
-- **json2html** (`POST https://json2html.adobeaem.workers.dev/config/jorgerzt/edsstorefront/main`): entrada `/example-from-aem-and-commerce` → endpoint `…/api/edsstorefront/aem/content/edsstorefront/es/{{id}}.model.json`, plantilla `/templates/aem-page.html`.
+- **json2html** (`POST https://json2html.adobeaem.workers.dev/config/jorgerzt/edsstorefront/main`): entrada comodín `/` (cualquier página) → endpoint `…/api/edsstorefront/aem/content/edsstorefront/es/{{id}}.model.json`, plantilla `/templates/aem-page.html`.
+- **Nueva página = nuevo mock**: crear `edsstorefront/aem/content/edsstorefront/es/<slug>.model.json` en la API y previsualizar `/<slug>`. Si la API devuelve 404, json2html devuelve 404 y EDS sirve la página de DA (home, nav, footer, cart, checkout…). Ejemplo: `/test`.
 - **Cero llamadas al mock/AEM desde el cliente**: el HTML llega ya montado. El navegador solo llama a Commerce (Catalog Service / carrito).
 
 ## Qué contiene el repo
