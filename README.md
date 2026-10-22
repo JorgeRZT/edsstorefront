@@ -10,6 +10,8 @@ Demo de Adobe Solutions Consulting: la landing de [futbolemotion.com](https://ww
 |---|---|---|
 | Home (landing migrada) | https://main--edsstorefront--jorgerzt.aem.page/ | DA `jorgerzt/edsstorefront/index` |
 | Página desde AEM + Commerce | https://main--edsstorefront--jorgerzt.aem.page/example-from-aem-and-commerce | json2html ← mock AEM `.model.json` |
+| Ofertas (desde la API) | https://main--edsstorefront--jorgerzt.aem.page/ofertas | json2html ← mock `ofertas.model.json` |
+| Lifestyle (desde la API) | https://main--edsstorefront--jorgerzt.aem.page/lifestyle | json2html ← mock `lifestyle.model.json` |
 | Contenido DA | https://da.live/#/jorgerzt/edsstorefront | — |
 | Backup contenido original del boilerplate | `da.live/#/jorgerzt/edsstorefront/backup-boilerplate` | `index`, `nav`, `footer` |
 
@@ -42,7 +44,7 @@ Universal Editor ──► AEM Sites (layout + contenido)
 | `blocks/footer/` | Footer FE (secciones, apps, tarjeta de socio) |
 | `blocks/cards`, `carousel`, `columns` | Variantes FE (`products`, `players`, `recommender`, `ratings`, `seo`, `hero`, `banners`) con `moveInstrumentation` para UE |
 | `blocks/product-carousel/` | **Placeholder de Commerce**: lee `skus` / `category` / `phrase` / `page-size`, consulta Catalog Service `productSearch` y pinta tarjetas con “Añadir a la cesta” (`cartApi.addProductsToCart`) |
-| `templates/aem-page.html` | Plantilla Mustache de json2html: transforma el modelo AEM en secciones/bloques EDS; `productList` → bloque `product-carousel` |
+| `templates/aem-page.html` | Plantilla Mustache de json2html: cada elemento de `sections[]` es un tipo de sección (`intro`, `cromos`, `carousel`, `productList`, `banners`, `players`, `recommender`, `categories`, `blog`, `ratings`, `seo`); `productList` → bloque `product-carousel` |
 | `blocks/*/_*.json`, `models/_*.json` → `component-*.json` | Modelos de Universal Editor con plugins `da` **y** `xwalk` (AEM). Regenerar con `npm run build:json` |
 
 ## Universal Editor
