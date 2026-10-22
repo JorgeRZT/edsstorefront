@@ -230,6 +230,10 @@
           {
             "name": "Blog",
             "value": "blog"
+          },
+          {
+            "name": "Cromos (landing)",
+            "value": "cromos"
           }
         ]
       }

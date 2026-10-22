@@ -9,6 +9,22 @@
 <header></header>
 <main>
 {{#sections}}
+{{#intro}}
+<div>
+<h1>{{title}}</h1>
+<p>{{text}}</p>
+{{#cta}}<p><a href="{{href}}">{{label}}</a></p>{{/cta}}
+</div>
+{{/intro}}
+{{#cromos}}
+<div>
+{{#title}}<h2>{{title}}</h2>{{/title}}
+<div class="cards cromos">
+{{#items}}<div><div><picture><img src="{{image.src}}" alt="{{image.alt}}"></picture></div><div><h3><a href="{{href}}">{{title}}</a></h3><p>{{text}}</p></div></div>
+{{/items}}
+</div>
+</div>
+{{/cromos}}
 {{#carousel}}
 <div>
 <div class="carousel {{variant}}">
