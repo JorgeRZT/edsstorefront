@@ -1,8 +1,78 @@
-# Edge Delivery Services + Adobe Commerce Boilerplate
+# Fútbol Emotion · EDS Commerce Storefront + AEM Sites (json2html / BYOM)
 
-This project boilerplate is for Edge Delivery Services projects that integrate with Adobe Commerce.
+Demo de Adobe Solutions Consulting: la landing de [futbolemotion.com](https://www.futbolemotion.com) migrada a un **Storefront de Adobe Commerce sobre Edge Delivery Services**, con el layout y el contenido editorial servidos desde **AEM Sites** (simulado con un mock) y renderizados **siempre en servidor** mediante **json2html**. Los productos los pintan los **drop-ins de Commerce** dentro de placeholders que coloca el editor en **Universal Editor**.
 
-## Documentation
+> Demo, no producción: `robots: noindex, nofollow`. Nada publicado en `.aem.live`.
+
+## URLs
+
+| Qué | URL | Fuente |
+|---|---|---|
+| Home (landing migrada) | https://main--edsstorefront--jorgerzt.aem.page/ | DA `jorgerzt/edsstorefront/index` |
+| Página desde AEM + Commerce | https://main--edsstorefront--jorgerzt.aem.page/example-from-aem-and-commerce | json2html ← mock AEM `.model.json` |
+| Contenido DA | https://da.live/#/jorgerzt/edsstorefront | — |
+| Backup contenido original del boilerplate | `da.live/#/jorgerzt/edsstorefront/backup-boilerplate` | `index`, `nav`, `footer` |
+
+## Arquitectura
+
+```
+Universal Editor ──► AEM Sites (layout + contenido)
+                         │  .model.json  (mock: my-custom-api)
+                         ▼
+             json2html (BYOM, servidor) + templates/aem-page.html
+                         │  HTML semántico EDS (secciones + bloques)
+                         ▼
+   Content source overlay (admin.hlx.page)  ──► EDS preview/live (CDN)
+                         │
+                         ▼
+   Navegador: decora bloques; product-carousel → Catalog Service + cart drop-in
+```
+
+- **Overlay**: el content source del sitio es DA, con overlay `markup` a `https://json2html.adobeaem.workers.dev/jorgerzt/edsstorefront/main`. Las rutas configuradas en json2html salen de AEM; el resto (404 en json2html) cae a DA.
+- **json2html** (`POST https://json2html.adobeaem.workers.dev/config/jorgerzt/edsstorefront/main`): entrada `/example-from-aem-and-commerce` → endpoint `…/api/edsstorefront/aem/content/edsstorefront/es/{{id}}.model.json`, plantilla `/templates/aem-page.html`.
+- **Cero llamadas al mock/AEM desde el cliente**: el HTML llega ya montado. El navegador solo llama a Commerce (Catalog Service / carrito).
+
+## Qué contiene el repo
+
+| Ruta | Descripción |
+|---|---|
+| `styles/`, `fonts/` (Figtree), `icons/` | Look & feel FE mapeado sobre los tokens de los drop-ins (negro `#0f0f0f`, rojo `#ff3b30`, botones píldora, ancho 1440px) |
+| `blocks/header/` | Header de Commerce re-skineado: topbar (4ª sección del nav), buscador visible con resultados en vivo, Tiendas, Cuenta (auth drop-in), wishlist, Cesta (mini-cart) |
+| `blocks/footer/` | Footer FE (secciones, apps, tarjeta de socio) |
+| `blocks/cards`, `carousel`, `columns` | Variantes FE (`products`, `players`, `recommender`, `ratings`, `seo`, `hero`, `banners`) con `moveInstrumentation` para UE |
+| `blocks/product-carousel/` | **Placeholder de Commerce**: lee `skus` / `category` / `phrase` / `page-size`, consulta Catalog Service `productSearch` y pinta tarjetas con “Añadir a la cesta” (`cartApi.addProductsToCart`) |
+| `templates/aem-page.html` | Plantilla Mustache de json2html: transforma el modelo AEM en secciones/bloques EDS; `productList` → bloque `product-carousel` |
+| `blocks/*/_*.json`, `models/_*.json` → `component-*.json` | Modelos de Universal Editor con plugins `da` **y** `xwalk` (AEM). Regenerar con `npm run build:json` |
+
+## Universal Editor
+
+- Con **xwalk** (AEM Sites como fuente) el editor coloca secciones (estilos: Ancho completo, Centrado, Productos, Recomendador, Valoraciones, SEO) y bloques (cards, carousel, columns, `product-carousel`…).
+- El bloque **Product Carousel** (grupo *Product*) se configura con SKUs, categoría, búsqueda y nº de productos: el editor decide *qué* productos y *dónde*; el drop-in los pinta con precio y stock reales.
+- Los bloques de Commerce (`commerce-cart`, `product-details`, …) siguen disponibles en el filtro de sección.
+
+## Cómo probarlo
+
+1. Abrir la home y `/example-from-aem-and-commerce` (URLs arriba).
+2. En DevTools → Network: no hay llamadas a `workers.dev`; sí a Catalog Service.
+3. Pulsar **Añadir a la cesta** en una tarjeta → el contador del mini-cart sube.
+4. Cambiar el contenido: editar el mock (`edsstorefront/aem/content/edsstorefront/es/example-from-aem-and-commerce.model.json` en my-custom-api) y re-previsualizar:
+   ```bash
+   curl -X POST -H "Authorization: Bearer $IMS_TOKEN" \
+     https://admin.hlx.page/preview/jorgerzt/edsstorefront/main/example-from-aem-and-commerce
+   ```
+5. Local: `npm install && npm run install:dropins` (ver nota de `ignore-scripts` abajo) y `aem up`.
+
+## Notas y límites
+
+- Catálogo Commerce de demo (`config.json` → aemshop.net, merchandising Adobe): los productos no son de Fútbol Emotion.
+- Textos de los drop-ins aún en inglés y precios en $ (placeholders y configuración de tienda, no estilos).
+- La wishlist no existe en futbolemotion.com; se mantiene de Commerce.
+- Para pasar a AEM real: sustituir el endpoint del mock por `https://<publish>/content/<site>/{{id}}.model.json` en la config de json2html.
+
+---
+
+## Boilerplate original (Adobe Commerce)
+### Documentation
 
 Before using the boilerplate, we recommend you to go through the documentation on <https://experienceleague.adobe.com/developer/commerce/storefront/> and more specifically:
 
@@ -13,13 +83,13 @@ Before using the boilerplate, we recommend you to go through the documentation o
 1. [Web Performance](https://www.aem.live/developer/keeping-it-100)
 1. [Markup, Sections, Blocks, and Auto Blocking](https://www.aem.live/developer/markup-sections-blocks)
 
-## Getting Started
+### Getting Started
 
 Use the [Site Creator Tool](https://da.live/app/adobe-commerce/storefront-tools/tools/site-creator/site-creator) to quickly spin up your own copy of code and content.
 
 Alternatively, you can follow our [Guide](https://experienceleague.adobe.com/developer/commerce/storefront/get-started/) for a more detailed walkthrough.
 
-## Installation
+### Installation
 
 Run `npm install` to install dependencies.
 
@@ -33,7 +103,7 @@ npm run install:dropins
 
 This copies the built assets from `node_modules/@dropins` and the relevant `@adobe/*` packages into `scripts/__dropins__`, and applies the GraphQL fragment/operation overrides in `build.mjs`. Edge Delivery Services serves the copied files directly, so this step must complete before `npm start` will reflect the correct drop-in behavior.
 
-## Staying Up to Date
+### Staying Up to Date
 
 Once you fork or clone this repo, the code is yours — you are not subscribed to updates.
 
@@ -97,7 +167,7 @@ If your GitHub organization disallows the "Allow GitHub Actions to create and ap
 
 If you want to incorporate code changes made to this upstream boilerplate after you forked — for example, a new block or a bug fix in `scripts/` — you can do so by adding this repo as a git remote and merging selectively. This is entirely optional. Upstream changes may conflict with modifications you have made to your fork, so expect to resolve conflicts manually. There is no guarantee of a clean merge, and nothing in your project depends on staying in sync with the upstream boilerplate code.
 
-## Changelog
+### Changelog
 
 Major changes to this boilerplate are described and documented as part of pull requests and tracked via the `changelog` tag. This log documents changes to the canonical starting point — not upgrades that forked implementations must apply. Review it if you are considering pulling specific upstream changes into your fork:
 
